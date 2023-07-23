@@ -30,7 +30,7 @@ func GetAllTasksFromDB() ([]types.Task, error) {
 	return taskList, nil
 }
 
-func GetTaskByID(taskID string) (types.Task, error) {
+func GetOneTaskFromDB(taskID string) (types.Task, error) {
 	row := DB.QueryRow(`SELECT id, title, remindtime, isrecurring, frequency, is_completed
 		FROM tasks WHERE id = ?`, taskID)
 
