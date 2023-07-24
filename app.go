@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 
+	"github.com/google/uuid"
 	"github.com/hokagecv/forgo/storage"
 	"github.com/hokagecv/forgo/types"
 )
@@ -41,7 +42,16 @@ func (a *App) GetTaskByID(taskID string) *types.Task {
 	return &task
 }
 
-func (a *App) CreateTask(task types.Task) error {
+func (a *App) CreateTask(title string, remindtime string, isrecurring bool, frequency string) error {
+	var task = types.Task{
+		ID:          uuid.New().String(),
+		Title:       title,
+		RemindTime:  remindtime,
+		IsCompleted: false,
+		IsRecurring: isrecurring,
+		Frequency:   frequency,
+	}
+
 	err := storage.CreateTaskInDB(task)
 	if err != nil {
 		return err

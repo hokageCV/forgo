@@ -33,6 +33,7 @@ func InitializeDB() error {
 		log.Fatal(err)
 		return err
 	}
+	log.Printf("dbFilePath: %s", dbFilePath)
 
 	// Initialize the database connection
 	DB, err = sql.Open("sqlite3", dbFilePath)
@@ -45,11 +46,11 @@ func InitializeDB() error {
 	_, err = DB.Exec(`
 		CREATE TABLE IF NOT EXISTS tasks (
 			id TEXT PRIMARY KEY,
-			description TEXT,
-			reminder TEXT,
-			recurring BOOLEAN,
+			title TEXT,
+			remindtime TEXT,
+			isrecurring BOOLEAN,
 			frequency TEXT,
-			is_completed BOOLEAN
+			iscompleted BOOLEAN
 		)
 	`)
 	if err != nil {

@@ -31,7 +31,7 @@ func GetAllTasksFromDB() ([]types.Task, error) {
 }
 
 func GetOneTaskFromDB(taskID string) (types.Task, error) {
-	row := DB.QueryRow(`SELECT id, title, remindtime, isrecurring, frequency, is_completed
+	row := DB.QueryRow(`SELECT id, title, remindtime, isrecurring, frequency, iscompleted
 		FROM tasks WHERE id = ?`, taskID)
 
 	var task types.Task
@@ -48,7 +48,7 @@ func CreateTaskInDB(task types.Task) error {
 	taskID := uuid.New().String()
 
 	_, err := DB.Exec(`
-		INSERT INTO tasks (id, title, remindtime, isrecurring, frequency, is_completed)
+		INSERT INTO tasks (id, title, remindtime, isrecurring, frequency, iscompleted)
 		VALUES (?, ?, ?, ?, ?, ?)
 	`, taskID, task.Title, task.RemindTime, task.IsRecurring, task.Frequency, task.IsCompleted)
 	if err != nil {
