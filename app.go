@@ -42,8 +42,8 @@ func (a *App) GetTaskByID(taskID string) *types.Task {
 	return &task
 }
 
-func (a *App) CreateTask(title string, remindtime string, isrecurring bool, frequency string) error {
-	var task = types.Task{
+func (a *App) CreateTask(title string, remindtime string, isrecurring bool, frequency string) (types.Task, error) {
+	var newTask = types.Task{
 		ID:          uuid.New().String(),
 		Title:       title,
 		RemindTime:  remindtime,
@@ -52,9 +52,10 @@ func (a *App) CreateTask(title string, remindtime string, isrecurring bool, freq
 		Frequency:   frequency,
 	}
 
-	err := storage.CreateTaskInDB(task)
+	err := storage.CreateTaskInDB(newTask)
 	if err != nil {
-		return err
+		return types.Task{}, err
 	}
-	return nil
+
+	return newTask, nil
 }

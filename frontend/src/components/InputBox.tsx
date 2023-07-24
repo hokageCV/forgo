@@ -1,6 +1,7 @@
 import { h } from "preact";
 import { useState } from "preact/hooks";
 import { CreateTask } from "../../wailsjs/go/main/App";
+import { useTaskContextProvider } from "../context/taskContext";
 
 const initialFormState = {
     title: "",
@@ -13,6 +14,7 @@ const initialFormState = {
 const InputBox = () => {
     const [formData, setFormData] = useState(initialFormState);
     const [error, setError] = useState<string>("");
+    const { addTask } = useTaskContextProvider();
     const [submittedData, setSubmittedData] = useState<any>(null);
 
     const handleChange = (e: any) => {
@@ -25,8 +27,9 @@ const InputBox = () => {
         });
     };
 
-    const handleSubmit = (e: any) => {
+    const handleSubmit = async (e: any) => {
         e.preventDefault();
+
         if (!formData.title || !formData.remindtime) {
             setError("Please fill all the fields");
             return;
@@ -35,14 +38,20 @@ const InputBox = () => {
         setSubmittedData(formData);
         const remindTime = new Date(formData.remindtime);
 
-        CreateTask(
-            formData.title,
-            remindTime.toISOString(),
-            formData.isrecurring,
-            formData.frequency
-        );
-        setError("");
-        setFormData(initialFormState);
+        try {
+            const createdTask = await CreateTask(
+                formData.title,
+                remindTime.toISOString(),
+                formData.isrecurring,
+                formData.frequency
+            );
+
+            setError("");
+            addTask(createdTask);
+            setFormData(initialFormState);
+        } catch (error: any) {
+            setError("Couldn't create task");
+        }
     };
 
     return (

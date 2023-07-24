@@ -1,12 +1,10 @@
-import { TaskType } from "../types";
 import { h } from "preact";
 import Task from "./Task";
+import { useTaskContextProvider } from "../context/taskContext";
 
-type TaskListProps = {
-    taskList: TaskType[];
-};
+export default function TaskList() {
+    const { taskList } = useTaskContextProvider();
 
-export default function TaskList({ taskList }: TaskListProps) {
     return (
         <div class="flex flex-col justify-center items-center bg-frost-1 rounded-md p-4 m-5">
             {taskList.length > 0 ? (
