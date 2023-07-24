@@ -58,3 +58,26 @@ func CreateTaskInDB(task types.Task) error {
 
 	return nil
 }
+
+func UpdateTaskInDB(task types.Task) error {
+	_, err := DB.Exec(`
+		UPDATE tasks SET title = ?, remindtime = ?, isrecurring = ?, frequency = ?, iscompleted = ?
+		WHERE id = ?
+	`, task.Title, task.RemindTime, task.IsRecurring, task.Frequency, task.IsCompleted, task.ID)
+	if err != nil {
+		log.Fatal(err)
+		return err
+	}
+
+	return nil
+}
+
+func DeleteTaskFromDB(taskID string) error {
+	_, err := DB.Exec(`DELETE FROM tasks WHERE id = ?`, taskID)
+	if err != nil {
+		log.Fatal(err)
+		return err
+	}
+
+	return nil
+}

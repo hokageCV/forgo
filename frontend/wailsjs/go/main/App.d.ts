@@ -4,6 +4,10 @@ import {types} from '../models';
 
 export function CreateTask(arg1:string,arg2:string,arg3:boolean,arg4:string):Promise<types.Task>;
 
+export function DeleteTask(arg1:string):Promise<void>;
+
 export function GetAllTasks():Promise<Array<types.Task>>;
 
 export function GetTaskByID(arg1:string):Promise<types.Task>;
+
+export function UpdateTask(arg1:string,arg2:string,arg3:string,arg4:boolean,arg5:string):Promise<void>;

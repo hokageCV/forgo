@@ -59,3 +59,28 @@ func (a *App) CreateTask(title string, remindtime string, isrecurring bool, freq
 
 	return newTask, nil
 }
+
+func (a *App) UpdateTask(taskID, title, remindtime string, isrecurring bool, frequency string) error {
+	task, err := storage.GetOneTaskFromDB(taskID)
+	if err != nil {
+		return err
+	}
+
+	// Update the task properties
+	task.Title = title
+	task.RemindTime = remindtime
+	task.IsRecurring = isrecurring
+	task.Frequency = frequency
+
+	err = storage.UpdateTaskInDB(task)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (a *App) DeleteTask(taskID string) error {
+	err := storage.DeleteTaskFromDB(taskID)
+	return err
+}
