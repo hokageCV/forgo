@@ -22,7 +22,7 @@ export default function Task({ task }: TaskProps) {
     };
 
     return (
-        <div className="card w-64 bg-night-3 rounded-md shadow-xl p-4 m-2">
+        <div className="card w-64 h-32 bg-night-4 rounded-md shadow-xl shadow-night-5 p-4">
             <button
                 className="absolute top-2 right-2 text-flame hover:text-grape transition-all"
                 onClick={handleDelete}

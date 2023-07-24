@@ -1,5 +1,5 @@
 import { h } from "preact";
-import { useState } from "preact/hooks";
+import { useState, useEffect } from "preact/hooks";
 import { CreateTask } from "../../wailsjs/go/main/App";
 import { useTaskContextProvider } from "../context/taskContext";
 
@@ -15,7 +15,6 @@ const InputBox = () => {
     const [formData, setFormData] = useState(initialFormState);
     const [error, setError] = useState<string>("");
     const { addTask } = useTaskContextProvider();
-    const [submittedData, setSubmittedData] = useState<any>(null);
 
     const handleChange = (e: any) => {
         const { name, value, type, checked } = e.target;
@@ -30,12 +29,15 @@ const InputBox = () => {
     const handleSubmit = async (e: any) => {
         e.preventDefault();
 
-        if (!formData.title || !formData.remindtime) {
+        if (
+            !formData.title ||
+            !formData.remindtime ||
+            (formData.isrecurring && !formData.frequency)
+        ) {
             setError("Please fill all the fields");
             return;
         }
 
-        setSubmittedData(formData);
         const remindTime = new Date(formData.remindtime);
 
         try {
@@ -54,12 +56,22 @@ const InputBox = () => {
         }
     };
 
-    return (
-        <div class="w-8/12 p-4 bg-night-3 text-snow-4 rounded-lg shadow-lg">
-            <h2 class="text-xl font-semibold mb-4">Task Details</h2>
+    useEffect(() => {
+        if (error) {
+            const timer = setTimeout(() => {
+                setError("");
+            }, 4 * 1000);
 
-            <div>
-                <div className="form-control w-full max-w-xs">
+            return () => clearTimeout(timer);
+        }
+    }, [error]);
+
+    return (
+        <div class="flex flex-col justify-center items-center w-shell p-4 mt-4 bg-night-3 text-snow-4 border-2 border-night-5 rounded-lg shadow-lg">
+            <h2 class="text-2xl font-semibold mb-4 text-center">Task Details</h2>
+
+            <div class="flex flex-col justify-center items-center">
+                <div className="form-control w-full max-w-xs ">
                     <label className="label">Title</label>
                     <input
                         type="text"
@@ -111,31 +123,38 @@ const InputBox = () => {
                         </select>
                     </div>
                 )}
-                <button className="btn btn-active btn-accent" onClick={handleSubmit} type="submit">
+                <button
+                    className="btn btn-active bg-soil hover:bg-grass text-lg text-night-3 m-2"
+                    onClick={handleSubmit}
+                    type="submit"
+                >
                     Submit
                 </button>
                 {error && (
                     <div className="alert alert-error max-w-max ">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="stroke-current shrink-0 h-6 w-6"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-                            />
-                        </svg>
+                        <CrossSVG />
                         <span>{error}</span>
                     </div>
                 )}
             </div>
-            {submittedData && <p>You submitted: {JSON.stringify(submittedData)}</p>}
         </div>
     );
 };
 
 export default InputBox;
+
+const CrossSVG = () => (
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className="stroke-current shrink-0 h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+    >
+        <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+        />
+    </svg>
+);

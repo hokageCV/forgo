@@ -6,11 +6,11 @@ export default function TaskList() {
     const { taskList } = useTaskContextProvider();
 
     return (
-        <div class="flex flex-col justify-center items-center bg-frost-1 rounded-md p-4 m-5">
+        <div class="flex flex-wrap justify-center items-center gap-6 w-shell bg-night-3 rounded-md p-6 m-5 border-2 border-night-5 ">
             {taskList.length > 0 ? (
                 taskList.map((task) => <Task key={task.id} task={task} />)
             ) : (
-                <p className="text-flame bg-grass p-3 rounded-md text-lg">No tasks</p>
+                <p className="text-flame font-bold p-3 rounded-md text-lg">No tasks</p>
             )}
         </div>
     );

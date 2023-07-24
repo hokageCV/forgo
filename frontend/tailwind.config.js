@@ -8,7 +8,7 @@ module.exports = {
         mont: ["montserrat", "sans-serif"],
       },
       colors: {
-        baseBG: "#14283d",
+        baseBG: "#8894a8",
         snow: {
           4: "#c8d0e0",
           3: "#D8DEE9",
@@ -16,6 +16,7 @@ module.exports = {
           1: "#ECEFF4",
         },
         night: {
+          5: "#1e232e",
           4: "#2E3440",
           3: "#3B4252",
           2: "#434C5E",
@@ -32,6 +33,9 @@ module.exports = {
         grass: "#A3BE8C",
         soil: "#EBCB8B",
 
+      },
+      spacing: {
+        "shell": "700px",
       }
     },
   },
