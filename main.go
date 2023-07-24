@@ -4,7 +4,6 @@ import (
 	"embed"
 	"log"
 
-	"github.com/hokagecv/forgo/api"
 	"github.com/hokagecv/forgo/storage"
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
@@ -20,8 +19,6 @@ func main() {
 		log.Fatal(err)
 		return
 	}
-
-	api.SetupRoutes()
 
 	// Create an instance of the app structure
 	app := NewApp()
