@@ -1,5 +1,11 @@
-import {render} from 'preact';
-import {App} from './app';
-import './style.css';
+import { render } from "preact";
+import { App } from "./app";
+import "./style.css";
+import { TaskProvider } from "./context/taskContext";
 
-render(<App/>, document.getElementById('app')!);
+render(
+    <TaskProvider>
+        <App />
+    </TaskProvider>,
+    document.getElementById("app")!
+);
