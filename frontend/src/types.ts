@@ -1,4 +1,4 @@
-export type Task = {
+export type TaskType = {
     id: string;
     title: string;
     remindtime: string;

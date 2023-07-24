@@ -27,7 +27,11 @@ module.exports = {
           2: "#88C0D0",
           1: "#8FBCBB",
         },
-        red: "#FF0000",
+        lal: "#BF616A",
+        flame: "#D08770",
+        grass: "#A3BE8C",
+        soil: "#EBCB8B",
+
       }
     },
   },

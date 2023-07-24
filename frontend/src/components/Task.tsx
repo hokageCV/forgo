@@ -1,13 +1,13 @@
-import { Task } from "../types";
+import { TaskType } from "../types";
 import { h } from "preact";
 
 type TaskProps = {
-    task: Task;
+    task: TaskType;
 };
 
 export default function Task({ task }: TaskProps) {
     return (
-        <div className="card w-10/12 bg-night-3 shadow-xl">
+        <div className="card w-10/12 bg-night-3 rounded-md shadow-xl">
             <div className="card-body">
                 <h2 className="text-xl font-semibold mb-2">{task.title}</h2>
                 <p className="mb-2">Remind Time: {task.remindtime}</p>
