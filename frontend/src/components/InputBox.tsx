@@ -5,6 +5,7 @@ import { useTaskContextProvider } from "../context/taskContext";
 
 const initialFormState = {
     title: "",
+    reminddate: "",
     remindtime: "",
     iscompleted: false,
     isrecurring: false,
@@ -31,6 +32,7 @@ const InputBox = () => {
 
         if (
             !formData.title ||
+            !formData.reminddate ||
             !formData.remindtime ||
             (formData.isrecurring && !formData.frequency)
         ) {
@@ -38,12 +40,11 @@ const InputBox = () => {
             return;
         }
 
-        const remindTime = new Date(formData.remindtime);
-
         try {
             const createdTask = await CreateTask(
                 formData.title,
-                remindTime.toISOString(),
+                formData.reminddate,
+                formData.remindtime,
                 formData.isrecurring,
                 formData.frequency
             );
@@ -52,7 +53,7 @@ const InputBox = () => {
             addTask(createdTask);
             setFormData(initialFormState);
         } catch (error: any) {
-            setError("Couldn't create task");
+            setError(`Couldn't create task : ${error}`);
         }
     };
 
@@ -72,10 +73,10 @@ const InputBox = () => {
 
             <div class="flex flex-col justify-center items-center">
                 <div className="form-control w-full max-w-xs ">
-                    <label className="label">Title</label>
+                    <label className="label pb-0 mb-0">Title</label>
                     <input
                         type="text"
-                        placeholder="Type here"
+                        placeholder="Enter Task"
                         required
                         className="input input-bordered w-full max-w-xs"
                         name="title"
@@ -84,20 +85,32 @@ const InputBox = () => {
                     />
                 </div>
                 <div className="form-control w-full max-w-xs">
-                    <label className="label">Remind Time</label>
+                    <label className="label pb-0 mb-0">Date</label>
                     <input
-                        type="datetime-local"
-                        placeholder="Type here"
+                        type="date"
                         required
+                        className="input input-bordered w-full max-w-xs"
+                        name="reminddate"
+                        onChange={handleChange}
+                        value={formData.reminddate}
+                    />
+                </div>
+                <div className="form-control w-full max-w-xs">
+                    <label className="label pb-0 mb-0">Time</label>
+                    <input
+                        type="time"
+                        required
+                        placeholder="Enter Time"
                         className="input input-bordered w-full max-w-xs"
                         name="remindtime"
                         onChange={handleChange}
                         value={formData.remindtime}
+                        step="60"
                     />
                 </div>
                 <div className="form-control w-52">
                     <label className="cursor-pointer label">
-                        <span className="label-text">Recurring </span>
+                        <span className="label">Recurring </span>
                         <input
                             type="checkbox"
                             className="toggle toggle-primary"
@@ -109,7 +122,7 @@ const InputBox = () => {
                 </div>
                 {formData.isrecurring && (
                     <div className="form-control w-full max-w-xs">
-                        <label className="label">Frequency</label>
+                        <label className="label pb-0 mb-0">Frequency</label>
                         <select
                             className="select select-bordered w-full max-w-xs"
                             name="frequency"

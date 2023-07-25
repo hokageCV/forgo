@@ -45,6 +45,7 @@ func InitializeDB() error {
 		CREATE TABLE IF NOT EXISTS tasks (
 			id TEXT PRIMARY KEY,
 			title TEXT,
+			reminddate TEXT,
 			remindtime TEXT,
 			isrecurring BOOLEAN,
 			frequency TEXT,

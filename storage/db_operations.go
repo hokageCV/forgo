@@ -19,7 +19,7 @@ func GetAllTasksFromDB() ([]types.Task, error) {
 	for rows.Next() {
 		var task types.Task
 
-		err := rows.Scan(&task.ID, &task.Title, &task.RemindTime, &task.IsRecurring, &task.Frequency, &task.IsCompleted)
+		err := rows.Scan(&task.ID, &task.Title, &task.RemindDate, &task.RemindTime, &task.IsRecurring, &task.Frequency, &task.IsCompleted)
 		if err != nil {
 			log.Fatal(err)
 			return nil, err
@@ -31,12 +31,12 @@ func GetAllTasksFromDB() ([]types.Task, error) {
 }
 
 func GetOneTaskFromDB(taskID string) (types.Task, error) {
-	row := DB.QueryRow(`SELECT id, title, remindtime, isrecurring, frequency, iscompleted
+	row := DB.QueryRow(`SELECT id, title, reminddate, remindtime, isrecurring, frequency, iscompleted
 		FROM tasks WHERE id = ?`, taskID)
 
 	var task types.Task
 
-	err := row.Scan(&task.ID, &task.Title, &task.RemindTime, &task.IsRecurring, &task.Frequency, &task.IsCompleted)
+	err := row.Scan(&task.ID, &task.Title, &task.RemindDate, &task.RemindTime, &task.IsRecurring, &task.Frequency, &task.IsCompleted)
 	if err != nil {
 		return types.Task{}, err
 	}
@@ -47,12 +47,16 @@ func GetOneTaskFromDB(taskID string) (types.Task, error) {
 func CreateTaskInDB(task types.Task) error {
 	taskID := uuid.New().String()
 
-	_, err := DB.Exec(`
-		INSERT INTO tasks (id, title, remindtime, isrecurring, frequency, iscompleted)
-		VALUES (?, ?, ?, ?, ?, ?)
-	`, taskID, task.Title, task.RemindTime, task.IsRecurring, task.Frequency, task.IsCompleted)
+	stmt, err := DB.Prepare(`INSERT INTO tasks 
+	(id, title, reminddate, remindtime, isrecurring, frequency, iscompleted)
+		VALUES (?, ?, ?, ?, ?, ?, ?)
+	`)
 	if err != nil {
-		log.Fatal(err)
+		return err
+	}
+
+	_, err = stmt.Exec(taskID, task.Title, task.RemindDate, task.RemindTime, task.IsRecurring, task.Frequency, task.IsCompleted)
+	if err != nil {
 		return err
 	}
 
@@ -60,12 +64,17 @@ func CreateTaskInDB(task types.Task) error {
 }
 
 func UpdateTaskInDB(task types.Task) error {
-	_, err := DB.Exec(`
-		UPDATE tasks SET title = ?, remindtime = ?, isrecurring = ?, frequency = ?, iscompleted = ?
+	stmt, err := DB.Prepare(`UPDATE tasks 
+		SET title = ?, reminddate=?, remindtime = ?, isrecurring = ?, frequency = ?, iscompleted = ?
 		WHERE id = ?
-	`, task.Title, task.RemindTime, task.IsRecurring, task.Frequency, task.IsCompleted, task.ID)
+	`)
 	if err != nil {
-		log.Fatal(err)
+		return err
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(task.Title, task.RemindDate, task.RemindTime, task.IsRecurring, task.Frequency, task.IsCompleted, task.ID)
+	if err != nil {
 		return err
 	}
 
@@ -73,9 +82,14 @@ func UpdateTaskInDB(task types.Task) error {
 }
 
 func DeleteTaskFromDB(taskID string) error {
-	_, err := DB.Exec(`DELETE FROM tasks WHERE id = ?`, taskID)
+	stmt, err := DB.Prepare(`DELETE FROM tasks WHERE id = ?`)
 	if err != nil {
-		log.Fatal(err)
+		return err
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(taskID)
+	if err != nil {
 		return err
 	}
 

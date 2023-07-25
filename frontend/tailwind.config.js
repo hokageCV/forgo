@@ -32,6 +32,7 @@ module.exports = {
         flame: "#D08770",
         grass: "#A3BE8C",
         soil: "#EBCB8B",
+        purp: "#B48EAD"
 
       },
       spacing: {

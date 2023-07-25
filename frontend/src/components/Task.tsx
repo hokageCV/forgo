@@ -2,7 +2,7 @@ import { TaskType } from "../types";
 import { h } from "preact";
 import { useTaskContextProvider } from "../context/taskContext";
 import { DeleteTask } from "../../wailsjs/go/main/App";
-import { useFormatedDate } from "../hooks/date";
+import { useDateFormat, useTimeFormat } from "../hooks/useFormater";
 
 type TaskProps = {
     task: TaskType;
@@ -10,7 +10,8 @@ type TaskProps = {
 
 export default function Task({ task }: TaskProps) {
     const { removeTask } = useTaskContextProvider();
-    const { formattedDate, formattedTime } = useFormatedDate(task.remindtime);
+    const formatedDate = useDateFormat(task.reminddate);
+    const formatedTime = useTimeFormat(task.remindtime);
 
     const handleDelete = async () => {
         try {
@@ -32,10 +33,10 @@ export default function Task({ task }: TaskProps) {
             <h2 className="text-xl font-semibold mb-2">{task.title}</h2>
             <div className="flex flex-row justify-evenly items-center">
                 <p className="flex flex-row justify-center items-center text-base mb-2">
-                    <CalendarSVG /> &nbsp; {formattedDate}
+                    <CalendarSVG /> &nbsp; {formatedDate}
                 </p>
                 <p className="flex flex-row justify-center items-center text-base mb-2">
-                    <ClockSVG /> &nbsp; {formattedTime}
+                    <ClockSVG /> &nbsp; {formatedTime}
                 </p>
             </div>
 

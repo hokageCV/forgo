@@ -42,10 +42,11 @@ func (a *App) GetTaskByID(taskID string) *types.Task {
 	return &task
 }
 
-func (a *App) CreateTask(title string, remindtime string, isrecurring bool, frequency string) (types.Task, error) {
+func (a *App) CreateTask(title string, reminddate string, remindtime string, isrecurring bool, frequency string) (types.Task, error) {
 	var newTask = types.Task{
 		ID:          uuid.New().String(),
 		Title:       title,
+		RemindDate:  reminddate,
 		RemindTime:  remindtime,
 		IsCompleted: false,
 		IsRecurring: isrecurring,
@@ -60,14 +61,15 @@ func (a *App) CreateTask(title string, remindtime string, isrecurring bool, freq
 	return newTask, nil
 }
 
-func (a *App) UpdateTask(taskID, title, remindtime string, isrecurring bool, frequency string) error {
+func (a *App) UpdateTask(taskID, title, reminddate string, remindtime string, isrecurring bool, frequency string) error {
 	task, err := storage.GetOneTaskFromDB(taskID)
 	if err != nil {
 		return err
 	}
 
-	// Update the task properties
+	// updating
 	task.Title = title
+	task.RemindDate = reminddate
 	task.RemindTime = remindtime
 	task.IsRecurring = isrecurring
 	task.Frequency = frequency

@@ -3,6 +3,7 @@ export namespace types {
 	export class Task {
 	    id: string;
 	    title: string;
+	    reminddate: string;
 	    remindtime: string;
 	    iscompleted: boolean;
 	    isrecurring: boolean;
@@ -16,6 +17,7 @@ export namespace types {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.id = source["id"];
 	        this.title = source["title"];
+	        this.reminddate = source["reminddate"];
 	        this.remindtime = source["remindtime"];
 	        this.iscompleted = source["iscompleted"];
 	        this.isrecurring = source["isrecurring"];
