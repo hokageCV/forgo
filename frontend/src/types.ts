@@ -10,6 +10,7 @@ export type TaskType = {
 
 export type TaskStoreType = {
     taskList: TaskType[];
+    setTaskList: (taskList: TaskType[]) => void;
     addTask: (task: TaskType) => void;
     updateTask: (id: string, updatedTask: TaskType) => void;
     removeTask: (id: string) => void;

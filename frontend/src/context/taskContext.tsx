@@ -7,10 +7,10 @@ import useTaskList from "../hooks/useTaskList";
 export const TaskContext = createContext({} as TaskStoreType);
 
 export const TaskProvider: FunctionComponent = ({ children }) => {
-    const { taskList, addTask, updateTask, removeTask } = useTaskList();
+    const { taskList, setTaskList, addTask, updateTask, removeTask } = useTaskList();
 
     return (
-        <TaskContext.Provider value={{ taskList, addTask, updateTask, removeTask }}>
+        <TaskContext.Provider value={{ taskList, setTaskList, addTask, updateTask, removeTask }}>
             {children}
         </TaskContext.Provider>
     );

@@ -15,7 +15,7 @@ const useTaskList = () => {
         setTaskList(newTaskList);
     };
 
-    return { taskList, addTask, updateTask, removeTask };
+    return { taskList, setTaskList, addTask, updateTask, removeTask };
 };
 
 export default useTaskList;
